@@ -52,11 +52,18 @@ def get_user(id):
 def get_users():
    if request.method == 'GET':
       search_username = request.args.get('name')
+      job = request.args.get('job')
+      
       if search_username :
          subdict = {'users_list' : []}
          for user in users['users_list']:
             if user['name'] == search_username:
-               subdict['users_list'].append(user)
+               if not job:
+                  subdict['users_list'].append(user)
+               elif user['job'] == job:
+                  subdict['users_list'].append(user)
+
+
          return subdict
       return users
    elif request.method == 'POST':
@@ -67,15 +74,15 @@ def get_users():
       # 200 is the default code for a normal response
       return resp
    elif request.method == 'DELETE':
-   	userToDelete = request.get_json()
-   	userID = userToDelete["id"]
-   	resp = jsonify(success=True)
+      userToDelete = request.get_json()
+      userID = userToDelete["id"]
+      resp = jsonify(success=True)
 
-   	for ind,user in enumerate(users['users_list']):
-   		if user["id"] == userID:
-   			users['users_list'].pop(ind)
-   			resp = jsonify(success=True, userID=userID)
+      for ind,user in enumerate(users['users_list']):
+         if user["id"] == userID:
+            users['users_list'].pop(ind)
+            resp = jsonify(success=True, userID=userID)
 
-   	return resp
+      return resp
 
 
