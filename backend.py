@@ -89,9 +89,11 @@ def get_users():
 def deleteUser(userID):
    if request.method == 'DELETE':
       resp = jsonify(success=False)
+      resp.status_code = 400
       for ind,user in enumerate(users['users_list']):
          if user["id"] == userID:
             users['users_list'].pop(ind)
+            resp.status_code = 200
             resp = jsonify(success=True, userID=userID)
 
       return resp
